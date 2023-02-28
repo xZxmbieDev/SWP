@@ -59,16 +59,32 @@ const play = (c) => {
 
 const SaveGame = () => {
   // Speichert das Spiel sammt Wins, Losses, Draws local ab.
-  localStorage.setItem('wins', wins.value);
-  localStorage.setItem('losses', losses.value);
-  localStorage.setItem('draws', draws.value);
+  fetch('https://scherestein-f0c16-default-rtdb.europe-west1.firebasedatabase.app/wins.json', 
+  {method: 'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({wins:wins.value})})
+
+ //localStorage.setItem('wins', wins.value);
+  fetch('https://scherestein-f0c16-default-rtdb.europe-west1.firebasedatabase.app/losses.json',
+  {method: 'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({losses:losses.value})})
+
+  //localStorage.setItem('losses', losses.value);
+  fetch('https://scherestein-f0c16-default-rtdb.europe-west1.firebasedatabase.app/draws.json',
+  {method: 'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({draws:draws.value})})
+  //localStorage.setItem('draws', draws.value);
 };
 
-const LoadGame = () => {
+const LoadGame = async () => {
   // Ladet das Spiel vom lokalen Speicher (Alte Wins, Losses, Draws)
-  wins.value = parseInt(localStorage.getItem('wins')) || 0;
-  losses.value = parseInt(localStorage.getItem('losses')) || 0;
-  draws.value = parseInt(localStorage.getItem('draws')) || 0;
+  var data = await (await fetch('https://scherestein-f0c16-default-rtdb.europe-west1.firebasedatabase.app/wins.json')).json()
+  wins.value = parseInt(data.wins) || 0
+  var data = await (await fetch('https://scherestein-f0c16-default-rtdb.europe-west1.firebasedatabase.app/losses.json')).json()
+  losses.value = parseInt(data.losses) || 0
+  var data = await (await fetch('https://scherestein-f0c16-default-rtdb.europe-west1.firebasedatabase.app/draws.json')).json()
+  draws.value = parseInt(data.draws) || 0
+
+  
+  //wins.value = parseInt(localStorage.getItem('wins')) || 0;
+  //losses.value = parseInt(localStorage.getItem('losses')) || 0;
+  //draws.value = parseInt(localStorage.getItem('draws')) || 0;
 };
 
 const ResetRound = () => {
